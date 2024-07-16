@@ -16,4 +16,9 @@ MUML Component Diagram: Arjun
 Model Checking : Krithika
 Cognitive Behaviour : Vipin
 
-
+# Paper
+CONSENS Block diagram,internal block diagram,Abstract : Angel
+CONSENS Use case diagram, Requirement Diagram,Introduction : Akhilesh
+MUML Component Diagram,Conclusion: Arjun
+Model Checking : Krithika
+Cognitive Behaviour : Vipin
