@@ -8,3 +8,12 @@ weeder, and crop protector. Using Multi-agent UML (MUML) techniques and ResNet-1
 processing, the system ensures precise interventions. UPPAAL for mechatronics modeling guarantees
 performance and reliability. This innovation reduces manual labor, minimizes chemical use, and
 supports sustainable farming practices.
+
+# Work distribution
+CONSENS Block diagram,internal block diagram : Angel
+CONSENS Use case diagram, Requirement Diagram, Poster creation : Akhilesh
+MUML Component Diagram: Arjun
+Model Checking : Krithika
+Cognitive Behaviour : Vipin
+
+
