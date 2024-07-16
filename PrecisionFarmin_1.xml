@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan RequestReceived_Protect,Start,Start_protection;
+//chan RequestReceived_Sprayer,Start_sprayer;
+clock global;
+int[0,20] x_surveyor;
+clock issue;
+const int timer6=10;</declaration>
+	<template>
+		<name>Protector</name>
+		<parameter>const int &amp;timer4, chan &amp;RequestReceived, int &amp;protector_position, chan &amp;Protector_Start, chan &amp;Reached, chan &amp;IssueDetected</parameter>
+		<declaration>clock m,w;</declaration>
+		<location id="id0" x="-425" y="-51">
+		</location>
+		<location id="id1" x="-127" y="-51">
+			<name x="-187" y="-85">StartMovingtoLocation</name>
+		</location>
+		<location id="id2" x="59" y="-59">
+			<name x="85" y="-76">StartProcess</name>
+		</location>
+		<location id="id3" x="263" y="-59">
+			<name x="238" y="-42">StopProcess</name>
+		</location>
+		<location id="id4" x="-59" y="-8">
+		</location>
+		<location id="id5" x="-272" y="-51">
+			<name x="-314" y="-17">ReceiveRequest</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id6">
+			<source ref="id5"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-272" y="-42">RequestReceived!</label>
+		</transition>
+		<transition id="id7">
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-407" y="-68">IssueDetected?</label>
+			<label kind="assignment" x="-407" y="-51">issue=timer6</label>
+		</transition>
+		<transition id="id8">
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-41" y="-50">Reached?</label>
+			<label kind="assignment" x="-41" y="-33">m:=0</label>
+		</transition>
+		<transition id="id9">
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-187" y="34">Protector_Start!</label>
+		</transition>
+		<transition id="id10">
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<nail x="34" y="-246"/>
+		</transition>
+		<transition id="id11">
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="77" y="-93">m&gt;=timer4</label>
+		</transition>
+	</template>
+	<template>
+		<name>Observer</name>
+		<parameter>const int &amp;timer3, chan &amp;RequestReceived, chan &amp;Start, int &amp;x_position, chan &amp;Reached, chan &amp;IssueDetected</parameter>
+		<declaration>clock k,detect;
+
+</declaration>
+		<location id="id12" x="-391" y="-119">
+		</location>
+		<location id="id13" x="-93" y="-119">
+			<name x="-103" y="-153">DetectIssue</name>
+		</location>
+		<location id="id14" x="195" y="-119">
+			<name x="185" y="-153">SendData</name>
+			<label kind="invariant" x="185" y="-102">issue&lt;=3*timer6</label>
+		</location>
+		<location id="id15" x="-272" y="-119">
+			<name x="-281" y="-102">BeginDetection</name>
+		</location>
+		<location id="id16" x="-357" y="-8">
+			<name x="-408" y="17">EndOfField</name>
+		</location>
+		<init ref="id12"/>
+		<transition id="id17">
+			<source ref="id16"/>
+			<target ref="id12"/>
+			<nail x="-408" y="-51"/>
+		</transition>
+		<transition id="id18">
+			<source ref="id12"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-357" y="-51">Reached?</label>
+		</transition>
+		<transition id="id19">
+			<source ref="id12"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-373" y="-114">Start!</label>
+		</transition>
+		<transition id="id20">
+			<source ref="id15"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-246" y="-136">detect&gt;=timer3</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id14"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-170" y="-246">RequestReceived?</label>
+			<label kind="assignment" x="-144" y="-263">detect:=0</label>
+			<nail x="-102" y="-289"/>
+		</transition>
+		<transition id="id22">
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-75" y="-136">IssueDetected!</label>
+			<label kind="assignment" x="-75" y="-119">x_position = x_surveyor,issue=0</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Navigate</name>
+		<parameter>int[0,20] &amp;x,int &amp;position, chan &amp;Start, chan &amp;Reached</parameter>
+		<declaration>// Place local declarations her
+</declaration>
+		<location id="id23" x="-263" y="-68">
+			<name x="-289" y="-110">Idle</name>
+		</location>
+		<location id="id24" x="-93" y="-68">
+			<name x="-103" y="-102">Move</name>
+			<label kind="invariant" x="-103" y="-51">x&lt;=position</label>
+		</location>
+		<location id="id25" x="153" y="-68">
+			<name x="143" y="-102">LocationEnd</name>
+		</location>
+		<init ref="id23"/>
+		<transition id="id26">
+			<source ref="id24"/>
+			<target ref="id24"/>
+			<label kind="assignment" x="-118" y="-123">x++</label>
+			<nail x="-51" y="-119"/>
+			<nail x="-136" y="-127"/>
+		</transition>
+		<transition id="id27">
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<nail x="-34" y="-221"/>
+		</transition>
+		<transition id="id28">
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="guard" x="42" y="-93">x==position</label>
+			<label kind="synchronisation" x="-75" y="-85">Reached!</label>
+		</transition>
+		<transition id="id29">
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-245" y="-85">Start?</label>
+			<label kind="assignment" x="-245" y="-68">x:=0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+//const int timer4_spray =1;
+//int sprayingposition;
+//chan Weeder_Reached;
+//DiseaseDetector = Detector(timer5,RequestReceived_Sprayer,Start,sprayingposition,Surveyor_Reached);
+//Sprayer = Protector(timer4_spray,RequestReceived_Sprayer,sprayingposition,Start_sprayer,Sprayer_Reached);
+//Sprayer_Navigator = Navigate(x2,ObstacleClear,sprayingposition,Start_sprayer,Sprayer_Reached);
+//system Survey_Navigator,Obstacle1,WeedDetector,Weeder1,Weeder1_Navigator;
+const int timer=5;
+const int timer3=5;
+const int timer5 =6;
+const int timer4_weed =5;
+int protectionposition;
+
+int[0,20]x,x2;
+int surveyor_max_pos = 10;
+chan Surveyor_Reached,IssueDetected;
+
+chan Protection_Position_Reached;
+Survey_Navigator = Navigate(x_surveyor,surveyor_max_pos,Start,Surveyor_Reached);
+Observer1 = Observer(timer3,RequestReceived_Protect,Start,protectionposition,Surveyor_Reached,IssueDetected);
+Protector1 = Protector(timer4_weed,RequestReceived_Protect,protectionposition,Start_protection,Protection_Position_Reached,IssueDetected);
+Protector1_Navigator = Navigate(x,protectionposition,Start_protection,Protection_Position_Reached);
+// List one or more processes to be composed into a system.
+system Survey_Navigator,Observer1,Protector1,Protector1_Navigator;
+</system>
+	<queries>
+		<option key="--diagnostic" value="2"/>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>No deadlock in the system</comment>
+			<result outcome="success" type="quality" timestamp="2024-07-16 12:04:41 +0200">
+				<option key="--diagnostic" value="2"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Protector1.StopProcess</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-07-16 12:04:37 +0200">
+				<option key="--diagnostic" value="2"/>
+			</result>
+		</query>
+		<query>
+			<formula>Observer1.SendData--&gt; Protector1.ReceiveRequest</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-07-16 12:04:31 +0200">
+				<option key="--diagnostic" value="2"/>
+			</result>
+		</query>
+	</queries>
+</nta>
